@@ -20,7 +20,7 @@ export default function Register() {
         email,
         password,
         password_confirmation,
-        image,
+        image: image?.file,
       });
 
       setErrors({});
