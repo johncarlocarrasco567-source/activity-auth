@@ -75,15 +75,15 @@ class BlogController extends Controller
         }
 
         // Check if user owns the blog (optional authorization)
-        if ($blog->user_id !== $request->user()->id) {
-            return response()->json([
-                'message' => 'Unauthorized to update this blog'
-            ], 403);
-        }
+        // if ($blog->user_id !== $request->user()->id) {
+        //     return response()->json([
+        //         'message' => 'Unauthorized to update this blog'
+        //     ], 403);
+        // }
 
         $request->validate([
             'title' => ['sometimes', 'required', 'string', 'max:255'],
-            'image' => ['sometimes', 'image', 'mimes:jpg,jpeg,png', 'max:2048'],
+            'image' => ['required', 'image', 'mimes:jpg,jpeg,png'],
             'description' => ['sometimes', 'required', 'string'],
         ]);
 
