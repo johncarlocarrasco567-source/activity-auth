@@ -1,4 +1,3 @@
-
 import {
   View,
   Text,
@@ -29,10 +28,12 @@ export default function EditBlog() {
 
   const fetchBlog = async () => {
     try {
-      const { data } = await axios.get(`/blog/${id}`);
-      setTitle(data.title);
-      setDescription(data.description);
-      setCurrentImage(data.image);
+      const response = await axios.get(`/blog/${id}`);
+
+setTitle(response.data.title);
+setDescription(response.data.description);
+setCurrentImage(response.data.image);
+      console.log(response.data.title)
     } catch (error) {
       console.log(error);
       console.log("Error", "Failed to fetch blog data");
@@ -81,245 +82,258 @@ export default function EditBlog() {
   }
 };
 
-  return (
-    <ScrollView
-      style={{
-        flex: 1,
-        backgroundColor: "#f4f4f4",
-      }}
-      contentContainerStyle={{
-        padding: 20,
-      }}
-    >
-      <View
+ return (
+  <ScrollView
+    style={{
+      flex: 1,
+      backgroundColor: "#050b08",
+    }}
+    showsVerticalScrollIndicator={false}
+    contentContainerStyle={{
+      padding: 20,
+      paddingBottom: 60,
+    }}
+  >
+    {/* Header */}
+    <View style={{ marginBottom: 28 }}>
+      <Text
         style={{
-          backgroundColor: "white",
-          borderRadius: 10,
-          padding: 20,
+          fontSize: 34,
+          fontWeight: "900",
+          color: "#22c55e",
         }}
       >
-        <Text
-          style={{
-            fontSize: 24,
-            fontWeight: "bold",
-            marginBottom: 20,
-            textAlign: "center",
-          }}
-        >
-          Edit Blog
-        </Text>
+        EDIT MODE
+      </Text>
 
-        {/* Title Input */}
+      <Text
+        style={{
+          marginTop: 6,
+          fontSize: 15,
+          color: "#9ca3af",
+        }}
+      >
+        Modify your post like a system admin ⚙️
+      </Text>
+    </View>
+
+    {/* Card */}
+    <View
+      style={{
+        backgroundColor: "#0b1410",
+        borderRadius: 28,
+        padding: 22,
+        borderWidth: 1,
+        borderColor: "#14532d",
+
+        shadowColor: "#000",
+        shadowOpacity: 0.6,
+        shadowRadius: 20,
+        shadowOffset: { width: 0, height: 10 },
+        elevation: 10,
+      }}
+    >
+      {/* Title */}
+      <View style={{ marginBottom: 18 }}>
         <Text
           style={{
-            fontSize: 16,
-            fontWeight: "500",
+            fontSize: 13,
+            fontWeight: "800",
+            color: "#22c55e",
             marginBottom: 8,
           }}
         >
-          Title
+          TITLE
         </Text>
+
         <TextInput
           value={title}
           onChangeText={setTitle}
-          placeholder="Enter blog title"
+          placeholder="Enter title..."
+          placeholderTextColor="#64748b"
           style={{
+            height: 52,
+            borderRadius: 14,
+            paddingHorizontal: 14,
             borderWidth: 1,
-            borderColor: "#ddd",
-            borderRadius: 8,
-            padding: 12,
-            marginBottom: 16,
-            fontSize: 16,
+            borderColor: "#14532d",
+            backgroundColor: "#050b08",
+            color: "#ffffff",
           }}
         />
+
         {errors.title && (
-          <Text
-            style={{
-              color: "#ef4444",
-              fontSize: 14,
-              marginBottom: 16,
-            }}
-          >
+          <Text style={{ color: "#f87171", marginTop: 6 }}>
             {errors.title[0]}
           </Text>
         )}
+      </View>
 
-        {/* Description Input */}
+      {/* Description */}
+      <View style={{ marginBottom: 18 }}>
         <Text
           style={{
-            fontSize: 16,
-            fontWeight: "500",
+            fontSize: 13,
+            fontWeight: "800",
+            color: "#22c55e",
             marginBottom: 8,
           }}
         >
-          Description
+          DESCRIPTION
         </Text>
+
         <TextInput
           value={description}
           onChangeText={setDescription}
-          placeholder="Enter blog description"
+          placeholder="Write something..."
+          placeholderTextColor="#64748b"
           multiline
-          numberOfLines={4}
+          textAlignVertical="top"
           style={{
+            minHeight: 140,
+            borderRadius: 14,
+            padding: 14,
             borderWidth: 1,
-            borderColor: "#ddd",
-            borderRadius: 8,
-            padding: 12,
-            marginBottom: 16,
-            fontSize: 16,
-            minHeight: 100,
-            textAlignVertical: "top",
+            borderColor: "#14532d",
+            backgroundColor: "#050b08",
+            color: "#ffffff",
           }}
         />
+
         {errors.description && (
-          <Text
-            style={{
-              color: "#ef4444",
-              fontSize: 14,
-              marginBottom: 16,
-            }}
-          >
+          <Text style={{ color: "#f87171", marginTop: 6 }}>
             {errors.description[0]}
           </Text>
         )}
+      </View>
 
-        {/* Current Image */}
-        {!image && currentImage && (
-          <View style={{ marginBottom: 16 }}>
-            <Text
-              style={{
-                fontSize: 16,
-                fontWeight: "500",
-                marginBottom: 8,
-              }}
-            >
-              Current Image
-            </Text>
-            <Image
-              style={{
-                width: "100%",
-                height: 200,
-                borderRadius: 8,
-              }}
-              source={{
-                uri: `http://127.0.0.1:8000/storage/${currentImage}`,
-              }}
-            />
-          </View>
-        )}
-
-        {/* New Image Preview */}
-        {image && (
-          <View style={{ marginBottom: 16 }}>
-            <Text
-              style={{
-                fontSize: 16,
-                fontWeight: "500",
-                marginBottom: 8,
-              }}
-            >
-              New Image
-            </Text>
-            <Image
-              style={{
-                width: "100%",
-                height: 200,
-                borderRadius: 8,
-              }}
-              source={{
-                uri: image.uri,
-              }}
-            />
-          </View>
-        )}
-
-        {/* Image Picker Button */}
-        <TouchableOpacity
-          onPress={pickImage}
-          style={{
-            backgroundColor: "#3b82f6",
-            paddingVertical: 12,
-            borderRadius: 8,
-            alignItems: "center",
-            marginBottom: 16,
-          }}
-        >
+      {/* Current Image */}
+      {!image && currentImage && (
+        <View style={{ marginBottom: 18 }}>
           <Text
             style={{
-              color: "white",
-              fontWeight: "bold",
+              fontSize: 13,
+              fontWeight: "800",
+              color: "#22c55e",
+              marginBottom: 8,
             }}
           >
-            {image ? "Change Image" : "Browse New Image"}
+            CURRENT IMAGE
           </Text>
-        </TouchableOpacity>
-        <Text
-          style={{
-            color: "#666",
-            fontSize: 12,
-            textAlign: "center",
-            marginBottom: 16,
-          }}
-        >
-          Leave empty to keep current image
+
+          <Image
+            source={{
+              uri: `http://127.0.0.1:8000/storage/${currentImage}`,
+            }}
+            style={{
+              width: "100%",
+              height: 200,
+              borderRadius: 18,
+              borderWidth: 1,
+              borderColor: "#14532d",
+            }}
+            resizeMode="cover"
+          />
+        </View>
+      )}
+
+      {/* New Image */}
+      {image && (
+        <View style={{ marginBottom: 18 }}>
+          <Text
+            style={{
+              fontSize: 13,
+              fontWeight: "800",
+              color: "#22c55e",
+              marginBottom: 8,
+            }}
+          >
+            NEW IMAGE
+          </Text>
+
+          <Image
+            source={{ uri: image.uri }}
+            style={{
+              width: "100%",
+              height: 200,
+              borderRadius: 18,
+              borderWidth: 1,
+              borderColor: "#14532d",
+            }}
+            resizeMode="cover"
+          />
+        </View>
+      )}
+
+      {/* Pick Image */}
+      <TouchableOpacity
+        onPress={pickImage}
+        activeOpacity={0.85}
+        style={{
+          height: 52,
+          borderRadius: 16,
+          backgroundColor: "#22c55e",
+          justifyContent: "center",
+          alignItems: "center",
+          marginBottom: 10,
+        }}
+      >
+        <Text style={{ color: "#000", fontWeight: "900" }}>
+          {image ? "CHANGE IMAGE" : "BROWSE IMAGE"}
         </Text>
+      </TouchableOpacity>
 
-        {errors.image && (
-          <Text
-            style={{
-              color: "#ef4444",
-              fontSize: 14,
-              marginBottom: 16,
-            }}
-          >
-            {errors.image[0]}
-          </Text>
-        )}
+      <Text
+        style={{
+          textAlign: "center",
+          color: "#9ca3af",
+          fontSize: 12,
+          marginBottom: 16,
+        }}
+      >
+        Leave empty to keep current image
+      </Text>
 
-        {/* Update Button */}
+      {/* Buttons */}
+      <View style={{ flexDirection: "row", gap: 12 }}>
+        {/* Update */}
         <TouchableOpacity
           onPress={handleUpdateBlog}
           disabled={loading}
           style={{
-            backgroundColor: loading ? "#86efac" : "#22c55e",
-            paddingVertical: 14,
-            borderRadius: 8,
+            flex: 1,
+            height: 52,
+            borderRadius: 16,
+            backgroundColor: loading ? "#14532d" : "#22c55e",
+            justifyContent: "center",
             alignItems: "center",
-            marginBottom: 12,
           }}
         >
-          <Text
-            style={{
-              color: "white",
-              fontWeight: "bold",
-              fontSize: 16,
-            }}
-          >
-            {loading ? "Updating..." : "Update Blog"}
+          <Text style={{ color: "#000", fontWeight: "900" }}>
+            {loading ? "UPDATING..." : "UPDATE"}
           </Text>
         </TouchableOpacity>
 
-        {/* Cancel Button */}
+        {/* Cancel */}
         <TouchableOpacity
           onPress={() => router.back()}
           style={{
-            backgroundColor: "#9ca3af",
-            paddingVertical: 14,
-            borderRadius: 8,
+            flex: 1,
+            height: 52,
+            borderRadius: 16,
+            backgroundColor: "#0b1410",
+            borderWidth: 1,
+            borderColor: "#22c55e",
+            justifyContent: "center",
             alignItems: "center",
           }}
         >
-          <Text
-            style={{
-              color: "white",
-              fontWeight: "bold",
-              fontSize: 16,
-            }}
-          >
-            Cancel
+          <Text style={{ color: "#22c55e", fontWeight: "900" }}>
+            CANCEL
           </Text>
         </TouchableOpacity>
       </View>
-    </ScrollView>
-  );
+    </View>
+  </ScrollView>
+);
 }
