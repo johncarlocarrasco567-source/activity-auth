@@ -23,27 +23,16 @@ export default function Home() {
   };
 
   const deleteBlog = async (id: number) => {
-    Alert.alert(
-      "Delete Blog",
-      "Are you sure you want to delete this blog?",
-      [
-        { text: "Cancel", style: "cancel" },
-        {
-          text: "Delete",
-          onPress: async () => {
+   
             try {
               await axios.delete(`/blog/delete/${id}`);
               fetchBlog();
-              Alert.alert("Success", "Blog deleted successfully");
+              
             } catch (error: any) {
               console.log(error);
-              Alert.alert("Error", "Failed to delete blog");
+             
             }
-          },
-          style: "destructive",
-        },
-      ]
-    );
+        
   };
 
   useFocusEffect(
@@ -57,117 +46,150 @@ export default function Home() {
     fetchBlog();
   }, []);
 
-  return (
-    <ScrollView
-      style={{
-        flex: 1,
-        backgroundColor: "#f4f4f4",
-      }}
-      contentContainerStyle={{
-        padding: 20,
-      }}
-    >
-      {blogs.map((item) => (
-        <View
-          key={item.id}
-          style={{
-            backgroundColor: "white",
-            borderRadius: 10,
-            marginBottom: 20,
-            overflow: "hidden",
-            elevation: 3,
-            shadowColor: "#000",
-            shadowOpacity: 0.1,
-            shadowRadius: 5,
-          }}
-        >
-          <Image
-            source={{
-              uri: `http://127.0.0.1:8000/storage/${item.image}`,
-            }}
-            style={{
-              width: "100%",
-              height: 200,
-            }}
-            resizeMode="cover"
-          />
+ return (
+  <ScrollView
+    style={{
+      flex: 1,
+      backgroundColor: "#0b0f1a",
+    }}
+    showsVerticalScrollIndicator={false}
+    contentContainerStyle={{
+      padding: 16,
+      paddingBottom: 60,
+    }}
+  >
+    {/* Header */}
+    <View style={{ marginBottom: 20 }}>
+      <Text
+        style={{
+          fontSize: 30,
+          fontWeight: "900",
+          color: "#ffffff",
+        }}
+      >
+        BLOG CONTROL
+      </Text>
 
-          <View
+      <Text
+        style={{
+          color: "#9ca3af",
+          marginTop: 4,
+        }}
+      >
+        Admin-style management dashboard ⚙️
+      </Text>
+    </View>
+
+    {blogs.map((item) => (
+      <View
+        key={item.id}
+        style={{
+          flexDirection: "row",
+          backgroundColor: "#111827",
+          borderRadius: 18,
+          marginBottom: 14,
+          borderWidth: 1,
+          borderColor: "#1f2937",
+          overflow: "hidden",
+
+          shadowColor: "#000",
+          shadowOpacity: 0.4,
+          shadowRadius: 12,
+          shadowOffset: { width: 0, height: 6 },
+          elevation: 6,
+        }}
+      >
+        {/* LEFT INDICATOR BAR (new identity) */}
+        <View
+          style={{
+            width: 5,
+            backgroundColor: "#6366f1",
+          }}
+        />
+
+        {/* IMAGE (small thumbnail style) */}
+        <Image
+          source={{
+            uri: `http://127.0.0.1:8000/storage/${item.image}`,
+          }}
+          style={{
+            width: 90,
+            height: "100%",
+          }}
+          resizeMode="cover"
+        />
+
+        {/* CONTENT */}
+        <View style={{ flex: 1, padding: 12 }}>
+          {/* Title */}
+          <Text
+            numberOfLines={1}
             style={{
-              padding: 15,
+              color: "#fff",
+              fontSize: 16,
+              fontWeight: "800",
             }}
           >
-            <Text
-              style={{
-                fontSize: 18,
-                fontWeight: "bold",
-                marginBottom: 5,
-              }}
-            >
-              {item.title}
-            </Text>
+            {item.title}
+          </Text>
 
-            <Text
-              style={{
-                color: "#555",
-                marginBottom: 10,
-              }}
-            >
-              {item.description}
-            </Text>
+          {/* Description */}
+          <Text
+            numberOfLines={2}
+            style={{
+              color: "#9ca3af",
+              fontSize: 13,
+              marginTop: 4,
+            }}
+          >
+            {item.description}
+          </Text>
 
-            <View
-              style={{
-                flexDirection: "row",
-                gap: 10,
-                marginTop: 10,
-              }}
+          {/* Actions */}
+          <View
+            style={{
+              flexDirection: "row",
+              marginTop: 10,
+              gap: 8,
+            }}
+          >
+            {/* Update */}
+            <Pressable
+              onPress={() =>
+                router.navigate(`/(default)/(pages)/home/${item.id}`)
+              }
+              style={({ pressed }) => ({
+                flex: 1,
+                backgroundColor: pressed ? "#16a34a" : "#22c55e",
+                paddingVertical: 8,
+                borderRadius: 10,
+                alignItems: "center",
+              })}
             >
-              {/* Update Button */}
-              <Pressable
-                onPress={() => router.navigate(`/(default)/(pages)/home/${item.id}`)}
-                style={{
-                  flex: 1,
-                  backgroundColor: "#22c55e",
-                  paddingVertical: 10,
-                  borderRadius: 8,
-                  alignItems: "center",
-                }}
-              >
-                <Text
-                  style={{
-                    color: "white",
-                    fontWeight: "bold",
-                  }}
-                >
-                  Update
-                </Text>
-              </Pressable>
+              <Text style={{ color: "white", fontSize: 12, fontWeight: "800" }}>
+                UPDATE
+              </Text>
+            </Pressable>
 
-              {/* Delete Button */}
-              <Pressable
-                onPress={() => deleteBlog(item.id)}
-                style={{
-                  flex: 1,
-                  backgroundColor: "#ef4444",
-                  paddingVertical: 10,
-                  borderRadius: 8,
-                  alignItems: "center",
-                }}
-              >
-                <Text
-                  style={{
-                    color: "white",
-                    fontWeight: "bold",
-                  }}
-                >
-                  Delete
-                </Text>
-              </Pressable>
-            </View>
+            {/* Delete */}
+            <Pressable
+              onPress={() => deleteBlog(item.id)}
+              style={({ pressed }) => ({
+                flex: 1,
+                backgroundColor: pressed ? "#991b1b" : "#ef4444",
+                paddingVertical: 8,
+                borderRadius: 10,
+                alignItems: "center",
+              })}
+            >
+              <Text style={{ color: "white", fontSize: 12, fontWeight: "800" }}>
+                DELETE
+              </Text>
+            </Pressable>
           </View>
         </View>
-      ))}
-    </ScrollView>
-  );
+      </View>
+    ))}
+  </ScrollView>
+);
 }
